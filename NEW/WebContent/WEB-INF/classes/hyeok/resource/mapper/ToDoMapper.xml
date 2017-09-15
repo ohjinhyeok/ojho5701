@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hyeok.resource.mapper.ToDoMapper">
+  <!-- <select id="selectBlog" resultType="Blog">
+    select * from Blog where id = #{id}
+  </select> -->
+  <insert id="addToDo" parameterType="ToDo">
+  	INSERT INTO TODO_ADMIN VALUES(BAT_TODO_SEQ.NEXTVAL, #{userId}, #{todo}, SYSDATE)
+  </insert>
+  <insert id="baddToDo" parameterType="ToDo">
+  	INSERT INTO BAT_TODO VALUES(BAT_TODO_SEQ.NEXTVAL, #{userId}, #{todo}, SYSDATE)
+  </insert>
+  <insert id="BatAddToDo" parameterType="ToDo">
+  	INSERT INTO BAT VALUES(BAT_SEQ.NEXTVAL, #{userId}, #{menu})
+  </insert>
+  <select id="getOneToDo" resultType="ToDo">
+  	SELECT * FROM TODO_ADMIN
+  </select>
+  <select id="BatgetOneToDo" resultType="ToDo">
+  	SELECT * FROM BAT_TODO
+  </select>
+   <select id="getModToDo" parameterType="int" resultType="ToDo">
+  
+  	SELECT * FROM TODO_ADMIN
+	WHERE TODO_NO = #{todoNo}
+  
+  </select>
+  <select id="getOneMember" resultType="ToDo">
+  	SELECT * FROM BAT_MEMBER
+  	WHERE user_id = #{userId}
+  </select>
+  
+   <delete id="delToDo" parameterType="int">
+  	DELETE FROM TODO_ADMIN WHERE TODO_NO = #{todoNo}
+  </delete>
+  
+  <update id="modToDo" parameterType="ToDo">
+  	UPDATE TODO_ADMIN
+  	SET TODO = #{todo}, 
+  	TODO_YEAR = #{todoYear},
+  	TODO_MONTH = #{todoMonth}, 
+  	TODO_DAY =  #{todoDay}, 
+  	TODO_TIME = #{todoTime}
+  	WHERE TODO_NO = #{todoNo}
+  </update>
+  
+  <select id="getAllBat" resultType="ToDo">
+  	SELECT * FROM BAT
+  </select>
+  
+  <update id="BatModToDo" parameterType="ToDo">
+  	UPDATE BAT_MEMBER
+  	SET TOHYO = 1
+  	WHERE user_id = #{userId}
+  </update>
+  
+  <delete id="BatdelToDo" parameterType="int">
+  	DELETE FROM BAT_TODO 
+  	WHERE TODO_NO = #{todoNo}
+  </delete>
+  
+  <update id="BtodoModToDo"  parameterType="ToDo">
+  	UPDATE BAT_TODO
+  	SET TODO = #{todo}
+  	WHERE TODO_NO = #{todoNo}
+  </update>
+  
+ <select id="todoModToDo" resultType="ToDo">
+  	SELECT * FROM BAT_TODO
+  	WHERE TODO_NO = #{todoNo}
+  </select>
+</mapper>
+

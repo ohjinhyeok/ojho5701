@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.in.global.resource.mapper.boardMapper">
+  <!-- <select id="selectBlog" resultType="Blog">
+    select * from Blog where id = #{id}
+  </select> -->
+  <select id="getAllboard" resultType="boardVO" >
+  
+  	select memo_id, p_memo_id, user_id, decode(level,1,subject, LPAD('　　　　　　', 3*(level-1))||'re : '||subject) subject
+	from t_board
+	start with p_memo_id is null
+	connect by prior memo_id = p_memo_id
+
+  </select>
+  
+  <select id="getSelectboard" resultType="boardVO" parameterType="boardVO">
+select rnum, mid, p_memo_id, user_id, subject, reg_date
+from (select rownum as rnum, memo_id as mid, B.*
+from 
+(select memo_id, p_memo_id, subject, decode(level,1,user_id,lpad('　　　　　　　　　　', 3*(level-1))||' ┗ re : '||user_id) as user_id, reg_date
+from t_board
+start with p_memo_id is null
+connect by prior memo_id = p_memo_id
+order siblings by reg_date ASC ,p_memo_id DESC ) B
+where rownum <![CDATA[<]]> (11*#{i}))
+where rnum <![CDATA[>]]> 11*(#{i}-1)
+  </select>
+  
+  <select id="getModboard" parameterType="boardVO" resultType="boardVO">
+  	SELECT memo_id as mid, p_memo_id,user_id , subject FROM T_BOARD
+	WHERE MEMO_ID = #{mid}
+
+  </select>
+  
+  <select id="countboard" resultType="boardVO">
+  	select count(*) from t_board
+  </select>
+  
+  <insert id="addboard" parameterType="boardVO">
+  INSERT INTO t_board(memo_id, p_memo_id, user_id, subject, reg_date)
+  VALUES(t_board_SEQ.NEXTVAL, 
+  		  #{pmemoId}, 
+  		 #{userId}, 
+  		  #{subject}, 
+  		  SYSDATE)
+  </insert>
+   <insert id="baddboard" parameterType="boardVO">
+  INSERT INTO t_board(memo_id, user_id, subject, reg_date)
+  VALUES(t_board_SEQ.NEXTVAL, 
+  		 #{userId}, 
+  		  #{subject}, 
+  		  SYSDATE)
+  </insert>
+  
+  <update id="modboard" parameterType="boardVO">
+  	UPDATE T_BOARD
+  	SET SUBJECT = #{subject}
+  	WHERE MEMO_ID = #{mid}
+  </update>
+  
+  <delete id="delboard" parameterType="int">
+  	DELETE FROM T_BOARD WHERE MEMO_ID = #{mid}
+  </delete>
+</mapper>

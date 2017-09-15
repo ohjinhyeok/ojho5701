@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hyeok.resource.mapper.CalMapper">
+
+  <select id="getAllCal" resultType="CalVO">
+  	SELECT * FROM T_USER
+  	ORDER BY REG_DATE
+  </select>
+
+</mapper>
